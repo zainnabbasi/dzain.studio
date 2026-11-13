@@ -151,7 +151,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
         <div id="faq" className="grid grid-cols-1 lg:grid-cols-12 border-b border-white/10">
           <div className="lg:col-span-5 p-8 md:p-14 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#080808]">
             <div className="font-mono-code text-xs uppercase tracking-widest text-[#ff4d00] mb-3">
-              CLARITY BEFORE PRODUCTION · FAQ
+              FAQ
             </div>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-white tracking-tight">
               Direct answers on process, rights, and delivery.
