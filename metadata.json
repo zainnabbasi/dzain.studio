@@ -1,0 +1,6 @@
+{
+  "name": "KINETIX AI — Director-Led AI Video Production Studio",
+  "description": "Director-led AI video production for brands, campaigns, products, and social media. Ideas brought to life from concept and visual direction to final sound and edit.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
