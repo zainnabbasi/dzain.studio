@@ -208,7 +208,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                 START YOUR PRODUCTION · STEP 01
               </div>
               <h2 className="font-display text-3xl md:text-5xl font-bold text-white tracking-tight leading-[1.08]">
-                Share the idea, we build the visual world around it.
+                Share the idea. We build the visual world around it.
               </h2>
               <p className="text-white/70 text-base mt-5 leading-relaxed">
                 Whether you have a complete script or a single sentence describing
