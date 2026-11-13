@@ -16,6 +16,7 @@ import {
   Copy,
   Check,
   RotateCcw,
+  Loader2,
 } from 'lucide-react';
 
 interface BriefAndFaqSectionProps {
@@ -47,6 +48,10 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
   const [submittedSummary, setSubmittedSummary] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Web3Forms Submission State
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   useEffect(() => {
     if (prefilledContextNote && !ideaDescription) {
       setIdeaDescription(
@@ -55,8 +60,10 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
     }
   }, [prefilledContextNote]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+
     const validation = validateProjectBrief({
       name,
       email,
@@ -84,7 +91,46 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
       ideaDescription,
       currency,
     });
-    setSubmittedSummary(summary);
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: '73c97edc-db6c-4dc4-ab39-e35c09fdd9fa', // <-- Replace with your Web3Forms key
+          subject: `New Video Brief: ${brandOrProduct} (${selectedTierId})`,
+          from_name: 'dzain.studio Brief Desk',
+          name,
+          email,
+          brand_or_product: brandOrProduct,
+          project_goal: projectGoal,
+          duration_tier: selectedTierId,
+          aspect_ratio: selectedAspectRatio,
+          currency,
+          idea_description: ideaDescription,
+          formatted_brief_summary: summary,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSubmittedSummary(summary);
+      } else {
+        setSubmitError(
+          result.message || 'Unable to send brief right now. Please try again.'
+        );
+      }
+    } catch {
+      setSubmitError(
+        'Network error while submitting your brief. Please check your connection and try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCopySummary = async () => {
@@ -195,16 +241,16 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                 <div className="flex items-center gap-3 text-[#ff4d00]">
                   <CheckCircle2 className="w-6 h-6 shrink-0" />
                   <span className="font-mono-code text-xs uppercase tracking-widest">
-                    PRODUCTION BRIEF LOGGED · READY FOR DIRECTION
+                    PRODUCTION BRIEF SENT · READY FOR DIRECTION
                   </span>
                 </div>
 
                 <h3 className="font-display text-2xl md:text-3xl font-bold text-white">
-                  Thank you, {name}. Your video brief is structured and ready.
+                  Thank you, {name}. Your video brief has been received.
                 </h3>
 
                 <p className="text-sm text-white/75 leading-relaxed">
-                  We have generated your structured production specification
+                  We have received your structured production specification
                   below. Our creative director will review your concept and
                   reply to <span className="text-white font-medium">{email}</span>{' '}
                   with initial visual direction notes.
@@ -255,6 +301,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                     </label>
                     <input
                       id="brief-name"
+                      name="name"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -277,6 +324,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                     </label>
                     <input
                       id="brief-email"
+                      name="email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -301,6 +349,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                     </label>
                     <input
                       id="brief-brand"
+                      name="brand_or_product"
                       type="text"
                       value={brandOrProduct}
                       onChange={(e) => setBrandOrProduct(e.target.value)}
@@ -323,6 +372,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                     </label>
                     <select
                       id="brief-goal"
+                      name="project_goal"
                       value={projectGoal}
                       onChange={(e) => setProjectGoal(e.target.value)}
                       className="w-full bg-[#060606] border border-white/15 focus:border-[#ff4d00] px-4 py-3 text-sm text-white outline-none transition-colors"
@@ -416,6 +466,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                   </label>
                   <textarea
                     id="brief-idea"
+                    name="idea_description"
                     rows={4}
                     value={ideaDescription}
                     onChange={(e) => setIdeaDescription(e.target.value)}
@@ -429,12 +480,28 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                   )}
                 </div>
 
+                {submitError && (
+                  <p className="text-xs text-[#ff4d00] bg-[#160a06] border border-[#ff4d00]/40 p-3">
+                    {submitError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-4 px-6 bg-[#ff4d00] hover:bg-[#ff621f] text-black font-semibold text-sm tracking-wide flex items-center justify-center gap-2.5 transition-colors cursor-pointer whitespace-nowrap"
+                  disabled={isSubmitting}
+                  className="w-full py-4 px-6 bg-[#ff4d00] hover:bg-[#ff621f] disabled:opacity-60 text-black font-semibold text-sm tracking-wide flex items-center justify-center gap-2.5 transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  <span>Submit Project Brief & Request Visual Direction</span>
-                  <Send className="w-4 h-4" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Sending Project Brief...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Submit Project Brief & Request Visual Direction</span>
+                      <Send className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               </form>
             )}
