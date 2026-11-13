@@ -41,6 +41,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
   // Brief Form State
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [brandOrProduct, setBrandOrProduct] = useState('');
   const [projectGoal, setProjectGoal] = useState('Product Launch & Showcase');
   const [ideaDescription, setIdeaDescription] = useState('');
@@ -84,6 +85,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
     const summary = formatProjectBriefSummary({
       name,
       email,
+      phone,
       brandOrProduct,
       selectedTierId,
       projectGoal,
@@ -106,6 +108,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
           from_name: 'dzain.studio Brief Desk',
           name,
           email,
+          phone,
           brand_or_product: brandOrProduct,
           project_goal: projectGoal,
           duration_tier: selectedTierId,
@@ -205,7 +208,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                 START YOUR PRODUCTION · STEP 01
               </div>
               <h2 className="font-display text-3xl md:text-5xl font-bold text-white tracking-tight leading-[1.08]">
-                Share the idea. We build the visual world around it.
+                Share the idea, we build the visual world around it.
               </h2>
               <p className="text-white/70 text-base mt-5 leading-relaxed">
                 Whether you have a complete script or a single sentence describing
@@ -291,7 +294,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div>
                     <label
                       htmlFor="brief-name"
@@ -336,6 +339,24 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                         {errors.email}
                       </p>
                     )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="brief-phone"
+                      className="block font-mono-code text-xs uppercase tracking-wider text-white/70 mb-2"
+                    >
+                      Phone / WhatsApp Number
+                    </label>
+                    <input
+                      id="brief-phone"
+                      name="phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+91 98765 43210 (Optional)"
+                      className="w-full bg-[#060606] border border-white/15 focus:border-[#ff4d00] px-4 py-3 text-sm text-white outline-none transition-colors"
+                    />
                   </div>
                 </div>
 
@@ -464,6 +485,30 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                   >
                     The Idea & What the Video Needs to Communicate *
                   </label>
+
+                  {/* Quick-Fill Starter Prompts */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    {[
+                      '+ I only have a product link—pitch me a concept',
+                      '+ I have a rough script ready',
+                      '+ I want a style similar to a spec film above',
+                    ].map((starterText) => (
+                      <button
+                        key={starterText}
+                        type="button"
+                        onClick={() => {
+                          setIdeaDescription(starterText.replace(/^\+\s*/, '') + ': ');
+                          if (errors.ideaDescription) {
+                            setErrors((prev) => ({ ...prev, ideaDescription: '' }));
+                          }
+                        }}
+                        className="px-3 py-1.5 text-xs font-mono-code border border-white/15 bg-[#060606] hover:border-[#ff4d00] text-white/75 hover:text-white transition-colors cursor-pointer"
+                      >
+                        {starterText}
+                      </button>
+                    ))}
+                  </div>
+
                   <textarea
                     id="brief-idea"
                     name="idea_description"
@@ -486,6 +531,11 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                   </p>
                 )}
 
+                {/* Three-Point Risk-Reversal Guarantee Strip */}
+                <div className="py-3 px-4 border border-white/10 bg-[#070707] font-mono-code text-[11px] text-white/70 tracking-wider uppercase text-center">
+                  INCLUDES 2 REVISION ROUNDS · VISUAL STORYBOARD APPROVAL BEFORE GENERATION · 100% COMMERCIAL-SAFE AUDIO & VISUALS
+                </div>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -498,7 +548,7 @@ export const BriefAndFaqSection: React.FC<BriefAndFaqSectionProps> = ({
                     </>
                   ) : (
                     <>
-                      <span>Submit Project Brief & Request Visual Direction</span>
+                      <span>Get Your Free Director’s Treatment in 24 Hours</span>
                       <Send className="w-4 h-4" />
                     </>
                   )}

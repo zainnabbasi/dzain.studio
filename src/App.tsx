@@ -22,7 +22,6 @@ import {
   CurrencyCode,
   DurationTierId,
   AspectRatioFormat,
-  formatPrice,
 } from './utils/pricing';
 import { TimelineDivider } from './components/TimelineDivider';
 import { VideoLightboxModal } from './components/VideoLightboxModal';
@@ -163,19 +162,27 @@ export default function App() {
             </a>
           </div>
 
-          {/* Mobile Hamburger Trigger */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-            className="sm:hidden p-2 text-white border border-white/15 cursor-pointer"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </button>
+          {/* Mobile Action & Hamburger Trigger */}
+          <div className="flex sm:hidden items-center gap-2.5 shrink-0">
+            <a
+              href="#brief-project"
+              className="inline-flex items-center gap-1 bg-[#ff4d00] hover:bg-[#ff621f] text-black font-semibold px-3.5 py-2 text-xs tracking-wide transition-colors whitespace-nowrap shrink-0"
+            >
+              <span>Brief ↗</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+              className="p-2 text-white border border-white/15 cursor-pointer"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Drawer */}
@@ -256,7 +263,7 @@ export default function App() {
                   playsInline
                   className="w-full h-full object-cover opacity-55 scale-[1.01]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/85 to-[#050505]/45" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/95 to-[#050505]/45" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/60" />
               </div>
 
@@ -274,18 +281,17 @@ export default function App() {
               <div className="relative z-10 my-auto py-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
                 <div className="lg:col-span-8">
                   <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.03]">
-                    Ideas, brought to life{' '}
-                    <span className="text-[#ff4d00]">with AI.</span>
+                    Cinema-grade brand films.{' '}
+                    <span className="text-[#ff4d00]">
+                      Directed by a human, powered by AI.
+                    </span>
                   </h1>
 
                   <p className="mt-6 text-lg md:text-xl text-white/85 max-w-2xl leading-relaxed font-normal">
-                    We create AI-powered videos for brands, campaigns, products
-                    and social media. From the first idea to the final edit, the
-                    focus is simple:{' '}
-                    <span className="text-white font-semibold">
-                      Make the video look good, feel intentional and communicate
-                      clearly.
-                    </span>
+                    Anyone can type a prompt. Very few can direct a cut. We
+                    combine visual direction, intentional pacing, and master
+                    sound design to build product films and ad creatives that
+                    hold attention.
                   </p>
 
                   {/* Primary Action Row */}
@@ -325,9 +331,9 @@ export default function App() {
                     seamless from start to finish.
                   </p>
                   <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono-code text-xs text-white/60">
-                    <span>DURATION PACKAGES</span>
+                    <span>STUDIO SPEED</span>
                     <span className="text-[#ff4d00] font-semibold">
-                      FROM {formatPrice(currency === 'INR' ? 5000 : 65, currency)}
+                      TURNAROUND: 48–72 HRS
                     </span>
                   </div>
                 </div>
@@ -354,11 +360,9 @@ export default function App() {
                   </span>
                 </div>
                 <div>
-                  <span className="text-white/45 block">TRANSPARENT RATE</span>
+                  <span className="text-white/45 block">STUDIO OUTPUT</span>
                   <span className="text-[#ff4d00] font-semibold">
-                    {currency === 'INR'
-                      ? '₹5,000 – ₹18,000 PER FILM'
-                      : '$65 – $225 PER FILM'}
+                    DELIVERABLES: 4K MASTER + AUDIO STEMS
                   </span>
                 </div>
               </div>
@@ -383,8 +387,7 @@ export default function App() {
                   DIRECTED SPEC ANTHOLOGY · VISUAL PROOF OF CRAFT
                 </div>
                 <h2 className="font-display text-3xl md:text-5xl font-bold text-white tracking-tight">
-                  Make the video look good, feel intentional, and communicate
-                  clearly.
+                  Proof that AI video doesn&apos;t have to look &apos;AI-generated&apos;.
                 </h2>
               </div>
 
@@ -452,16 +455,23 @@ export default function App() {
                       <video
                         src={film.videoUrl}
                         poster={film.posterUrl}
-                        autoPlay
+                        preload="metadata"
                         muted
                         loop
                         playsInline
+                        onMouseEnter={(e) => {
+                          e.currentTarget.play().catch(() => {});
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.pause();
+                          e.currentTarget.currentTime = 0;
+                        }}
                         className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent pointer-events-none" />
 
                       {/* Top Unboxed Metadata Overlay */}
-                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between font-mono-code text-xs text-white/90">
+                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between font-mono-code text-xs text-white/90 pointer-events-none">
                         <span className="bg-black/75 px-2.5 py-1 border border-white/15">
                           {film.category.toUpperCase()} · {film.durationTag}
                         </span>
@@ -471,7 +481,7 @@ export default function App() {
                       </div>
 
                       {/* Play Action Indicator */}
-                      <div className="absolute bottom-4 right-4 w-11 h-11 bg-[#ff4d00] text-black flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <div className="absolute bottom-4 right-4 w-11 h-11 bg-[#ff4d00] text-black flex items-center justify-center group-hover:scale-105 transition-transform pointer-events-none">
                         <Play className="w-5 h-5 fill-black ml-0.5" />
                       </div>
                     </div>
@@ -495,7 +505,7 @@ export default function App() {
                           INSPECT VISUAL DIRECTION & PACING NOTES
                         </span>
                         <span className="text-[#ff4d00] flex items-center gap-1 font-semibold">
-                          <span>WATCH</span>
+                          <span>PLAY WITH SOUND + NOTES</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </span>
                       </div>

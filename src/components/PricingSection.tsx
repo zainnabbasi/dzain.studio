@@ -118,6 +118,22 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           </div>
         </div>
 
+        {/* Price Anchoring Comparison Bar */}
+        <div className="px-8 md:px-14 py-5 border-b border-white/10 bg-[#0b0908] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3 font-mono-code text-xs md:text-sm text-white/55">
+            <span className="w-2 h-2 bg-white/30 inline-block shrink-0" />
+            <span className="line-through decoration-white/40">
+              Traditional Live-Action Production: ₹2,50,000+ · 3–4 Weeks
+            </span>
+          </div>
+          <div className="flex items-center gap-3 font-mono-code text-xs md:text-sm text-[#ff4d00] font-semibold">
+            <span className="w-2 h-2 bg-[#ff4d00] inline-block shrink-0" />
+            <span>
+              dzain.studio AI Production: ₹5,000–₹18,000 · 48–72 Hours
+            </span>
+          </div>
+        </div>
+
         {/* Part 2: The 4 Duration-Based Pricing Tiers (PDF Page 5) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10">
           {PRICING_TIERS.map((tier) => {

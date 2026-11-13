@@ -174,6 +174,7 @@ export function calculateScopeEstimate(input: ScopeEstimateInput): ScopeEstimate
 export interface ProjectBriefInput {
   name: string;
   email: string;
+  phone?: string;
   brandOrProduct: string;
   selectedTierId: DurationTierId;
   projectGoal: string;
@@ -221,9 +222,13 @@ export function formatProjectBriefSummary(input: ProjectBriefInput): string {
     aspectRatio: input.aspectRatio,
   });
 
+  const contactLine = input.phone && input.phone.trim()
+    ? `Client: ${input.name.trim()} (${input.email.trim()} · WhatsApp/Phone: ${input.phone.trim()})`
+    : `Client: ${input.name.trim()} (${input.email.trim()})`;
+
   return [
     `DZAIN.STUDIO — PRODUCTION BRIEF`,
-    `Client: ${input.name.trim()} (${input.email.trim()})`,
+    contactLine,
     `Brand / Subject: ${input.brandOrProduct.trim()}`,
     `Selected Scale: ${tier.label} (${tier.shortTag})`,
     `Primary Objective: ${input.projectGoal}`,
